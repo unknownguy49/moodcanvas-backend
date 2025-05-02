@@ -25,8 +25,8 @@ def analyze():
     result = response.json()
 
     if isinstance(result, list) and len(result) > 0:
-        sentiment = result[0].get('label', 'unknown')  # Check if 'label' exists
-        score = result[0].get('score', 0.0)  # Check if 'score' exists
+        sentiment = result[0]['label']  # Directly access the label
+        score = result[0]['score']  # Directly access the score
     else:
         return jsonify({"error": "Invalid response from model"}), 500
 
