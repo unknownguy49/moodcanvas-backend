@@ -19,8 +19,8 @@ def analyze():
     response = requests.post(API_URL, headers=headers, json={"inputs": text})
     result = response.json()
 
-    # Check if result is a list and access the first element
-    if isinstance(result, list) and len(result) > 0:
+    # Check if the result is a list and the first element is a dictionary
+    if isinstance(result, list) and len(result) > 0 and isinstance(result[0], dict):
         sentiment = result[0].get('label', 'unknown')  # Safely get the 'label'
         score = result[0].get('score', 0)  # Safely get the 'score'
         return jsonify({
