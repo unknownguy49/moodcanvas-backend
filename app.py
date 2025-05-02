@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-API_URL = "https://api-inference.huggingface.co/models/SamLowe/roberta-base-go_emotions"
+API_URL = "https://api-inference.huggingface.co/models/gpt2"
 headers = {"Authorization": f"Bearer {os.environ['HF_API_KEY']}"}
 
 @app.route('/analyze', methods=['POST'])
