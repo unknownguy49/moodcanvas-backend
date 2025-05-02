@@ -17,7 +17,11 @@ def analyze():
         if not text:
             return jsonify({"error": "Text is required"}), 400
 
+        print("TEXT:", text)
+        print("KEY:", os.environ.get("HF_API_KEY"))
+
         response = requests.post(API_URL, headers=headers, json={"inputs": text})
+        print("RESPONSE:", response.text)
         result = response.json()
 
         if isinstance(result, dict) and "error" in result:
@@ -30,7 +34,5 @@ def analyze():
         })
 
     except Exception as e:
+        print("ERROR:", e)
         return jsonify({"error": str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
