@@ -6,33 +6,32 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-API_URL = "https://api-inference.huggingface.co/models/gpt2"
+API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english"
 headers = {"Authorization": f"Bearer {os.environ['HF_API_KEY']}"}
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
-    try:
-        data = request.get_json()
-        text = data.get("text", "")
-        if not text:
-            return jsonify({"error": "Text is required"}), 400
+    # Get the JSON data from the request
+    data = request.get_json()
+    text = data.get("text", "")
 
-        print("TEXT:", text)
-        print("KEY:", os.environ.get("HF_API_KEY"))
+    if not text:
+        return jsonify({"error": "Text is required"}), 400
 
-        response = requests.post(API_URL, headers=headers, json={"inputs": text})
-        print("RESPONSE:", response.text)
-        result = response.json()
+    # Send POST request to Hugging Face sentiment analysis model API
+    response = requests.post(API_URL, headers=headers, json={"inputs": text})
 
-        if isinstance(result, dict) and "error" in result:
-            return jsonify({"error": result["error"]}), 500
+    # Parse the response JSON and handle the results
+    result = response.json()
 
-        top = sorted(result[0], key=lambda x: x['score'], reverse=True)[0]
-        return jsonify({
-            "primary": top['label'].lower(),
-            "score": top['score']
-        })
+    sentiment = result[0]['label']
+    score = result[0]['score']
 
-    except Exception as e:
-        print("ERROR:", e)
-        return jsonify({"error": str(e)}), 500
+    # Returning result in the original format
+    return jsonify({
+        "primary": sentiment.lower(),
+        "score": score
+    })
+
+if __name__ == '__main__':
+    app.run(debug=True)
