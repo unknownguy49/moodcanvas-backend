@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the sentiment analysis model from Hugging Face
-model = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base")
+model = pipeline("sentiment-analysis")
 
 # Endpoint for analyzing sentiment
 @app.route('/analyze', methods=['POST'])
