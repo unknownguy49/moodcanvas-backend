@@ -34,11 +34,10 @@ def analyze():
             "score": result['score']
         })
 
-
     except Exception as e:
         # In case of an error, return a 500 error with the error message
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 # Run the Flask app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
